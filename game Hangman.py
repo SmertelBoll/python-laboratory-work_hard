@@ -184,10 +184,12 @@ def non_letter_input(warnings, guesses, letters_guessed):
     """
     if warnings > 0:
         warnings -= 1
+        print(f'Oops! That is not a valid letter. You have {warnings} warnings left:',
+              get_guessed_word(secret_word, letters_guessed))
     elif warnings <= 0:
         guesses -= 1
-    print(f'Oops! That is not a valid letter. You have {warnings} warnings left:',
-          get_guessed_word(secret_word, letters_guessed))
+        print("Oops! You've already guessed that letter. You have no warnings left so you lose one guess:",
+              get_guessed_word(secret_word, letters_guessed))
     print('-------------')
     return warnings, guesses
 
@@ -240,7 +242,7 @@ def finish_message(guesses):
     if guesses <= 0:
         print(f'Sorry, you ran out of guesses. The word was {secret_word}')
     else:
-        print(f'Congratulations, you won! Your total score for this game is: {(len(secret_word)) * guesses}')
+        print(f'Congratulations, you won! Your total score for this game is: {len(set(secret_word)) * guesses}')
 
 
 def hangman_with_hints(secret_word):
@@ -288,7 +290,7 @@ def hangman_with_hints(secret_word):
             show_possible_matches(get_guessed_word(secret_word, letters_guessed), letters_guessed)
 
         # There are extra characters or more than one character entered.
-        elif len(letter_guessed) > 1 or not letter_guessed.isalpha():
+        elif len(letter_guessed) > 1 or not letter_guessed.isalpha() or (letter_guessed not in get_available_letters(letters_guessed)):
             warnings, guesses = non_letter_input(warnings, guesses, letters_guessed)
 
         else:
